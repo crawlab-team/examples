@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+  master: 
+    image: crawlabteam/crawlab:latest
+    container_name: crawlab_example_master
+    environment:
+      CRAWLAB_SERVER_MASTER: "Y"
+      CRAWLAB_MONGO_HOST: "mongo"
+    volumes:
+      - "./.crawlab/master:/root/.crawlab"
+    ports:    
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+  worker01: 
+    image: crawlabteam/crawlab:latest
+    container_name: crawlab_example_worker01
+    environment:
+      CRAWLAB_SERVER_MASTER: "N"
+      CRAWLAB_GRPC_ADDRESS: "master"
+    volumes:
+      - "./.crawlab/worker01:/root/.crawlab"
+    depends_on:
+      - master
+
+  worker02: 
+    image: crawlabteam/crawlab:latest
+    container_name: crawlab_example_worker02
+    environment:
+      CRAWLAB_SERVER_MASTER: "N"
+      CRAWLAB_GRPC_ADDRESS: "master"
+    volumes:
+      - "./.crawlab/worker02:/root/.crawlab"
+    depends_on:
+      - master
+
+  mongo:
+    image: mongo:latest
+    container_name: crawlab_example_mongo
+    restart: always
