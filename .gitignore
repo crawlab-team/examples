@@ -131,3 +131,9 @@ tmp/
 
 # crawlab
 .crawlab
+
+# idea
+.idea
+
+# mac
+.DS_Store
