@@ -4,7 +4,7 @@ services:
     image: crawlabteam/crawlab:latest
     container_name: crawlab_example_master
     environment:
-      CRAWLAB_SERVER_MASTER: "Y"
+      CRAWLAB_NODE_MASTER: "Y"
       CRAWLAB_MONGO_HOST: "mongo"
     volumes:
       - "./.crawlab/master:/root/.crawlab"
@@ -17,8 +17,9 @@ services:
     image: crawlabteam/crawlab:latest
     container_name: crawlab_example_worker01
     environment:
-      CRAWLAB_SERVER_MASTER: "N"
+      CRAWLAB_NODE_MASTER: "N"
       CRAWLAB_GRPC_ADDRESS: "master"
+      CRAWLAB_FS_FILER_URL: "http://master:8080/api/filer"
     volumes:
       - "./.crawlab/worker01:/root/.crawlab"
     depends_on:
@@ -28,8 +29,9 @@ services:
     image: crawlabteam/crawlab:latest
     container_name: crawlab_example_worker02
     environment:
-      CRAWLAB_SERVER_MASTER: "N"
+      CRAWLAB_NODE_MASTER: "N"
       CRAWLAB_GRPC_ADDRESS: "master"
+      CRAWLAB_FS_FILER_URL: "http://master:8080/api/filer"
     volumes:
       - "./.crawlab/worker02:/root/.crawlab"
     depends_on:
