@@ -17,7 +17,7 @@ class BaiduSpider(scrapy.Spider):
             )
             yield item
 
-        next_url = response.css('.page-inner a.n::attr("href")').get()
+        next_url = response.css('#page a.n::attr("href")').get()
         if next_url is not None:
             yield scrapy.Request(
                 url=f'https://www.baidu.com{next_url}'

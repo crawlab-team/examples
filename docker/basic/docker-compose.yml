@@ -38,6 +38,6 @@ services:
       - master
 
   mongo:
-    image: mongo:latest
+    image: mongo:4.2
     container_name: crawlab_example_mongo
     restart: always
