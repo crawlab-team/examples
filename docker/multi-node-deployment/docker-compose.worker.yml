@@ -1,0 +1,13 @@
+# worker node
+version: '3.3'
+services:
+  worker:
+    image: crawlabteam/crawlab
+    container_name: crawlab_worker
+    restart: always
+    environment:
+      CRAWLAB_NODE_MASTER: N  # N: worker node
+      CRAWLAB_GRPC_ADDRESS: <master_node_ip>:9666  # grpc address
+      CRAWLAB_FS_FILER_URL: http://<master_node_ip>:8080/api/filer  # seaweedfs api
+    volumes:
+      - "/opt/crawlab/worker:/data"  # persistent crawlab data

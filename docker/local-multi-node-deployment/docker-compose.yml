@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+  # master node
+  master:
+    image: crawlabteam/crawlab
+    container_name: crawlab_master
+    restart: always
+    environment:
+      CRAWLAB_NODE_MASTER: Y  # Y: master node
+      CRAWLAB_MONGO_HOST: mongo  # mongo host address. In the docker compose network, directly refer to the service name
+      CRAWLAB_MONGO_PORT: 27017  # mongo port 
+      CRAWLAB_MONGO_DB: crawlab  # mongo database 
+      CRAWLAB_MONGO_USERNAME: username  # mongo username
+      CRAWLAB_MONGO_PASSWORD: password  # mongo password 
+      CRAWLAB_MONGO_AUTHSOURCE: admin  # mongo auth source 
+    volumes:
+      - "./data/crawlab/master:/data"  # persistent crawlab data
+    ports:
+      - "8080:8080"  # exposed api port
+      - "9666:9666"  # exposed grpc port
+    depends_on:
+      - mongo
+
+  # worker node
+  worker:
+    image: crawlabteam/crawlab
+    container_name: crawlab_worker
+    restart: always
+    environment:
+      CRAWLAB_NODE_MASTER: N  # N: worker node
+      CRAWLAB_GRPC_ADDRESS: master:9666  # grpc address
+      CRAWLAB_FS_FILER_URL: http://master:8080/api/filer  # seaweedfs api
+    volumes:
+      - "./data/crawlab/worker:/data"  # persistent crawlab data
+    depends_on:
+      - master
+
+  mongo:
+    image: mongo:4.2
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username  # mongo username
+      MONGO_INITDB_ROOT_PASSWORD: password  # mongo password
+    volumes:
+      - "./data/crawlab/mongo/data/db:/data/db"  # persistent mongo data
+    ports:
+      - "27017:27017"  # expose mongo port to host machine
+
