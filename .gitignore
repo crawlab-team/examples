@@ -137,3 +137,7 @@ tmp/
 
 # mac
 .DS_Store
+
+# node.js
+*/**/node_modules/
+dist/
